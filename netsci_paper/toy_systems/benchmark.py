@@ -1,7 +1,7 @@
 """
 Benchmark the GPU vs. CPU implementations.
 """
-
+import sys
 import time
 
 import numpy as np
@@ -31,7 +31,6 @@ def benchmark_MxM(platform, M, N):
             ab[node_pair_index][1] = j
     
     gaussian_2D = gaussian_mi.make_gaussian_independent_data(M, N)
-    
     X = cuarray.FloatCuArray()
     X.fromNumpy2D(gaussian_2D)
     I = cuarray.FloatCuArray()
@@ -43,7 +42,7 @@ def benchmark_MxM(platform, M, N):
 
 
 
-def benchmark_GPU_vs_CPU_MxM(M, N_values, attempt_N_with_GPU, attempt_N_with_CPU):
+def benchmark_GPU_vs_CPU_MxM(M, N_values, attempt_N_with_GPU, attempt_N_with_CPU, gpu_only):
     GPU_times_per_N = []
     CPU_times_per_N = []
     for i, N in enumerate(N_values):
@@ -57,15 +56,16 @@ def benchmark_GPU_vs_CPU_MxM(M, N_values, attempt_N_with_GPU, attempt_N_with_CPU
             print(f"Skipping N = {N} for GPU")
             GPU_times_per_N.append(np.nan)
         
-        if attempt_N_with_CPU[i]:
-            print(f"Running CPU benchmark. N = {N}")
-            CPU_time = benchmark_MxM(netcalc.CPU_PLATFORM, M, N)
-            CPU_time_per_N = CPU_time / (0.5 * N * M * (M-1))
-            print("Time per N (s):", CPU_time / N)
-            CPU_times_per_N.append(CPU_time_per_N)
-        else:
-            print(f"Skipping N = {N} for CPU")
-            CPU_times_per_N.append(np.nan)
+        if not gpu_only:
+            if attempt_N_with_CPU[i]:
+                print(f"Running CPU benchmark. N = {N}")
+                CPU_time = benchmark_MxM(netcalc.CPU_PLATFORM, M, N)
+                CPU_time_per_N = CPU_time / (0.5 * N * M * (M-1))
+                print("Time per N (s):", CPU_time / N)
+                CPU_times_per_N.append(CPU_time_per_N)
+            else:
+                print(f"Skipping N = {N} for CPU")
+                CPU_times_per_N.append(np.nan)
         
     return GPU_times_per_N, CPU_times_per_N
 
@@ -102,9 +102,22 @@ def plot_GPU_vs_CPU_times(N_values,
         print("saving figure:", filename)
         plt.savefig(filename)
 
+def save_results(GPU_times, CPU_times, suffix, gpu_only):
+    np.savetxt(f"GPU_times_{suffix}.txt", GPU_times)
+    if not gpu_only:
+        np.savetxt(f"CPU_times_{suffix}.txt", CPU_times)
+    return
+    
+
 if __name__ == "__main__":
     
-    N_values = [100, 316, 1000, 3160, 10000, 31600, 100000]
+    if "gpu_only" in sys.argv:
+        gpu_only = True
+    else:
+        gpu_only = False
+    
+    #N_values = [100, 316, 1000, 3160, 10000, 31600, 100000]
+    N_values = [31, 100, 316, 1000, 3160, 10000, 31600]
     #N_values = [10, 32, 100, 316]
     starttime = time.time()
     M = 10
@@ -112,25 +125,28 @@ if __name__ == "__main__":
     #attempt_N_with_GPU = [True, True, True, True]
     attempt_N_with_CPU = [True, True, True, True, True, False, False]
     #attempt_N_with_CPU = [True, True, True, False]
-    GPU_times_per_N_10, CPU_times_per_N_10 = benchmark_GPU_vs_CPU_MxM(M, N_values, attempt_N_with_GPU, attempt_N_with_CPU)
+    GPU_times_per_N_10, CPU_times_per_N_10 = benchmark_GPU_vs_CPU_MxM(M, N_values, attempt_N_with_GPU, attempt_N_with_CPU, gpu_only)
     print("Time to do M=10 (s):", time.time() - starttime)
+    save_results(GPU_times_per_N_10, CPU_times_per_N_10, "M_10", gpu_only)
     
-    M = 100
-    attempt_N_with_GPU = [True, True, True, True, True, True, False]
+    M = 30
+    attempt_N_with_GPU = [True, True, True, True, True, True, True]
     #attempt_N_with_GPU = [True, True, True, True]
     attempt_N_with_CPU = [True, True, True, True, False, False, False]
     #attempt_N_with_CPU = [True, True, False, False]
-    GPU_times_per_N_100, CPU_times_per_N_100 = benchmark_GPU_vs_CPU_MxM(M, N_values, attempt_N_with_GPU, attempt_N_with_CPU)
-    print("Time to do M=100 (s):", time.time() - starttime)
+    GPU_times_per_N_30, CPU_times_per_N_30 = benchmark_GPU_vs_CPU_MxM(M, N_values, attempt_N_with_GPU, attempt_N_with_CPU, gpu_only)
+    print("Time to do M=30 (s):", time.time() - starttime)
+    save_results(GPU_times_per_N_30, CPU_times_per_N_30, "M_30", gpu_only)
     
-    M = 1000
-    attempt_N_with_GPU = [True, True, True, True, True, False, False]
+    M = 100
+    attempt_N_with_GPU = [True, True, True, True, True, True, True]
     #attempt_N_with_GPU = [True, True, True, False]
     attempt_N_with_CPU = [True, True, True, False, False, False, False]
     #attempt_N_with_CPU = [True, True, False, False]
-    GPU_times_per_N_1000, CPU_times_per_N_1000 = benchmark_GPU_vs_CPU_MxM(M, N_values, attempt_N_with_GPU, attempt_N_with_CPU)
-    print("Time to do M=1000 (s):", time.time() - starttime)
+    GPU_times_per_N_100, CPU_times_per_N_100 = benchmark_GPU_vs_CPU_MxM(M, N_values, attempt_N_with_GPU, attempt_N_with_CPU, gpu_only)
+    print("Time to do M=100 (s):", time.time() - starttime)
+    save_results(GPU_times_per_N_100, CPU_times_per_N_100, "M_100", gpu_only)
     
-    plot_GPU_vs_CPU_times(N_values, GPU_times_per_N_10, CPU_times_per_N_10, 
-                          GPU_times_per_N_100, CPU_times_per_N_100, 
-                          GPU_times_per_N_1000, CPU_times_per_N_1000, filename="benchmark_all.png")
+    #plot_GPU_vs_CPU_times(N_values, GPU_times_per_N_10, CPU_times_per_N_10, 
+    #                      GPU_times_per_N_100, CPU_times_per_N_100, 
+    #                      GPU_times_per_N_1000, CPU_times_per_N_1000, filename="benchmark_all.png")
