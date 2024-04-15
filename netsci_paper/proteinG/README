@@ -2,28 +2,41 @@ Gromacs and OpenMM must be installed to run the following steps.
 
 Steps to prepare Gromacs protein G system:
 =====================================================
+```
 gmx pdb2gmx -f 1pgb_dry.pdb -o 1pgb_processed.gro -water tip4
 gmx editconf -f 1pgb_processed.gro -o 1pgb_newbox.gro -c -d 1.0 -bt cubic
 gmx solvate -cp 1pgb_newbox.gro -cs tip4p.gro -o 1pgb_solv.gro -p topol.top
 gmx grompp -f ions.mdp -c 1pgb_solv.gro -p topol.top -o ions.tpr
 gmx genion -s ions.tpr -o 1pgb_solv_ions.gro -p topol.top -pname NA -nname CL -neutral
 gmx grompp -f minim.mdp -c 1pgb_solv_ions.gro -p topol.top -o em.tpr
+```
 
 Run simulation:
 =====================================================
+```
 python run_npt.py
+```
 
 Align the trajectory:
 =====================================================
+```
 cpptraj < postsim.cpptraj
+```
 
 Make the correlation and Pearson matrices
 =====================================================
+```
 python make_correlation_matrix.py
 python make_pearson_matrix.py
+```
+
+Our version of the resultant files have been saved to this repository
+so one may skip ahead to the following section, if desired.
 
 Make the plots
 =====================================================
-python make_correlation_plot_local.py
+```
+python make_correlation_plot.py
+```
 
 

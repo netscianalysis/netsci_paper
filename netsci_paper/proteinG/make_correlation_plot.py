@@ -4,7 +4,7 @@ Make the plot of the proteinG correlation matrix.
 import numpy as np
 import matplotlib.pyplot as plt
 
-R_np = np.loadtxt("proteinG_corr_matrix_local2.txt")
+R_np = np.loadtxt("proteinG_corr_matrix.txt")
 R_np1 = np.loadtxt("proteinG_pearson_matrix.txt")
 
 # Ranges of data

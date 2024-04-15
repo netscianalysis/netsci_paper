@@ -1,0 +1,9 @@
+parm 1pgb_solv_ions.pdb
+box x 55.677 y 55.677 z 55.677 alpha 90.0 beta 90.0 gamma 90.0
+trajin 1pgb_out.dcd
+rms fit @CA
+strip !@CA
+trajout 1pgb_stripped.pdb onlyframes 1
+trajout 1pgb_stripped.dcd
+go
+quit

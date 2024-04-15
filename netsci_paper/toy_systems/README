@@ -1,17 +1,45 @@
 This directory contains scripts that run tests and benchmarks
-using the Gaussian distributions. In order to generate the
+using the Gaussian distributions. 
+
+# Algorithm Sensitivity to Dataset Size Plot
+In order to generate the
 figure that shows the accuracy of Kraskov's algorithm
 for different distribution covariances and different numbers
 of sampled data points, one must first run the script:
 
+```
 python gaussian_computed_vs_exact_generate.py
+```
 
-That will probably take several days to complete. Once that 
-is done, the plot can be generated:
+That will probably take several days to complete. 
+
+If you do not wish to wait until the entire calculations
+finish, you may simply use the data we generated before
+by renaming it:
+
+```
+mv gaussian_I2_minus_Iexact0.0_BACKUP.txt gaussian_I2_minus_Iexact0.0.txt
+mv gaussian_I2_minus_Iexact0.3_BACKUP.txt gaussian_I2_minus_Iexact0.3.txt
+mv gaussian_I2_minus_Iexact0.6_BACKUP.txt gaussian_I2_minus_Iexact0.6.txt
+mv gaussian_I2_minus_Iexact0.9_BACKUP.txt gaussian_I2_minus_Iexact0.9.txt
+```
+
+Once that is done, the plot can be generated:
 
 python gaussian_computed_vs_exact_plot.py
 
+# Benchmark Plots
 The benchmarks can be performed and plotted with the following
 command:
 
 python benchmark.py
+
+Note that this will generate data for the computer's existing GPU
+and CPU. The plotting script benchmark_plot_only.py will need to
+be modified to read data from the produced benchmark data. The
+data used in the publication already exists in this directory, and
+will be plotted by default.
+
+The plots can be generated with the following command:
+
+python benchmark_plot_only.py

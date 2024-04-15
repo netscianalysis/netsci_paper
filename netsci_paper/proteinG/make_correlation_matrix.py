@@ -116,7 +116,7 @@ netcalc.generalizedCorrelation(
 
 # Gen. Corr. in numpy array object
 R_np = R.toNumpy2D().reshape(num_nodes, num_nodes)
-corr_matrix_filename = "proteinG_corr_matrix_local2.txt"
+corr_matrix_filename = "proteinG_corr_matrix.txt"
 print("Saving matrix to:", corr_matrix_filename)
 np.savetxt(corr_matrix_filename, R_np)
 print(f"Total time: {time.time()-starttime:.3f} s.")
