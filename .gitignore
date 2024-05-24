@@ -111,3 +111,8 @@ ENV/
 # Job Generated output files 
 *.err
 *.out
+.idea/misc.xml
+.idea/modules.xml
+.idea/netsci_paper.iml
+.idea/vcs.xml
+.idea/inspectionProfiles/profiles_settings.xml
