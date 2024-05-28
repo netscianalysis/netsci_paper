@@ -116,3 +116,6 @@ ENV/
 .idea/netsci_paper.iml
 .idea/vcs.xml
 .idea/inspectionProfiles/profiles_settings.xml
+
+# Additional filters
+*.dcd*
