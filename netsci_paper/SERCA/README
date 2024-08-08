@@ -8,8 +8,10 @@ The average_struct.py script can read in an MD simulation and outputs a single s
 average position of the atoms. This structure is needed for the contact map analysis. 
 The pathfinding_script.py is defines pathfinding function and classes used for the network 
 analysis. It is meant to be imported as a module, rather than ran as a stand alone script. 
+The dATP_min_ATP_cor_output_script.tcl in the analysis_scripts directory can be used within VMD
+to visualize differences in correlation between dATP and ATP bound SERCA. 
 
-The run_scipts directory contains two scripts to carry out the GC analysis with netsci. 
+The run_scipts directory contains scripts to carry out the GC analysis with netsci. 
 run_simple_MI.py runs the algorithm using the local alignment algorithm. The script uses command line 
 arguments to specify the MD simulation, number of frames, etc. 
 The run_MI.sh is a bash script that calls the run_simple_MI.py script. It can be modified for submissions 
