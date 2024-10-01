@@ -1,6 +1,8 @@
 netsci_paper
 ==============================
-Data and calculations used for the Netsci paper.
+Data and calculations used for the Netsci paper:
+
+Stokely A, Votapka L, Hock M, Teitgen A, McCammon JA, McCullough A, Amaro R, NetSci: A Library for High Performance Biomolecular Simulation Network Analysis Computation. ChemRxiv. 2024; doi:10.26434/chemrxiv-2024-fjrpp This content is a preprint and has not been peer-reviewed.
 
 ## Installation
 
@@ -32,10 +34,15 @@ netsci_paper/
     README
 ```
 
+# Citing NetSci
+
+If you use NetSci, or any of the data within this repository, please cite the following paper:
+
+* Stokely A, Votapka L, Hock M, Teitgen A, McCammon JA, McCullough A, Amaro R, NetSci: A Library for High Performance Biomolecular Simulation Network Analysis Computation. ChemRxiv. 2024; doi:10.26434/chemrxiv-2024-fjrpp This content is a preprint and has not been peer-reviewed.
+
 ### Copyright
 
 Copyright (c) 2024, Lane Votapka and Andy Stokely
-
 
 #### Acknowledgements
  

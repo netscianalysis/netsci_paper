@@ -10,9 +10,9 @@ R_np1 = np.loadtxt("proteinG_pearson_matrix.txt")
 # Ranges of data
 num_nodes = 56
 
-for i in range(num_nodes):
-    for j in range(i, num_nodes):
-        R_np[i,j] = R_np1[i,j]
+#for i in range(num_nodes):
+#    for j in range(i, num_nodes):
+#        R_np[i,j] = R_np1[i,j]
 
 
 R_np = np.flip(R_np, axis=0)

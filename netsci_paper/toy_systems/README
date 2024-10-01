@@ -43,3 +43,9 @@ will be plotted by default.
 The plots can be generated with the following command:
 
 python benchmark_plot_only.py
+
+One may also generate the Bootstrap data and plots by running the following scripts:
+
+python gaussian_computed_vs_exact_bootstrap.py
+
+python gaussian_computed_vs_exact_distribution.py

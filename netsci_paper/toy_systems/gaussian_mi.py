@@ -48,7 +48,8 @@ def make_gaussian_independent_data(M, N):
     return gaussian_2D
 
 def run_gaussian_mi(n_realizations, N, covariance_value, ab, k, xd, d, platform):
-    I_values_sum = 0.0
+    #I_values_sum = 0.0
+    I_values_list = []
     total_time = 0.0
     for kay in range(n_realizations):
         gaussian_2D = make_gaussian_2D_points(N, covariance_value)
@@ -61,10 +62,12 @@ def run_gaussian_mi(n_realizations, N, covariance_value, ab, k, xd, d, platform)
         print("I[0][0]:", I[0][0])
         I_value = I[0][0]
         #assert np.isfinite(I_value), "NaN detected!"
-        I_values_sum += I_value
-        
-    I_values_avg = I_values_sum / n_realizations
-    return I_values_avg, total_time
+        #I_values_sum += I_value
+        I_values_list.append(I_value)
+    
+    return I_values_list, total_time
+    #I_values_avg = I_values_sum / n_realizations
+    #return I_values_avg, total_time
 
 def run_gaussian_mi_all(covariance_values, N_values,
         k, xd, d, platform, filename_prefix="gaussian_I2_minus_Iexact"):
@@ -77,18 +80,29 @@ def run_gaussian_mi_all(covariance_values, N_values,
               f"time: {time.time()-starttime:.3f}")
         I_exact = compute_I_exact(covariance_value)
         #results_matrix[1, 0] = covariance_value
+        list_filename = f"{filename_prefix}{covariance_value}_list.txt"
+        with open(list_filename, "w") as f:
+            f.write(f"# covariance_value: {covariance_value}\n")
+            
         for j, N in enumerate(N_values):
             print(f"N value: {N}, {j+1} of len(N_values)," 
                   f"time: {time.time()-starttime:.3f}")
             if N <= 100:
-                n_realizations = 2000000
+                n_realizations = 200 #2000000
             elif N <= 1000:
-                n_realizations = 500000
+                n_realizations = 200 #500000
             else:
-                n_realizations = 100000
+                n_realizations = 200 #100000
                 
-            I_values_avg, total_time = run_gaussian_mi(n_realizations, N, covariance_value, ab, k, xd, d, platform)
+            I_values_list, total_time = run_gaussian_mi(n_realizations, N, covariance_value, ab, k, xd, d, platform)
+            I_values_avg = np.mean(I_values_list)
             results_matrix[1,j+1] = I_values_avg - I_exact
+            
+            with open(list_filename, "a") as f:
+                f.write(f"# N: {N}\n")
+                for I_value in I_values_list:
+                    I_value_minus_I_exact = I_value - I_exact
+                    f.write(f"{I_value_minus_I_exact}\n")
         
         for j, N in enumerate(N_values):
             results_matrix[0, j+1] = N
