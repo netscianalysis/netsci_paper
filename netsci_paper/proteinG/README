@@ -39,4 +39,11 @@ Make the plots
 python make_correlation_plot.py
 ```
 
+Bootstrapping Error
+=====================================================
+To make the bootstrapping error matrices and plots:
+```
+python make_correlation_benchmark_matrices.py
+python make_correlation_plot_bootstrap.py
+```
 
